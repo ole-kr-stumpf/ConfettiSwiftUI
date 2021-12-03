@@ -145,17 +145,21 @@ struct ConfettiContainer: View {
     @State var firstAppear = true
 
     var body: some View{
-        ZStack{
-            ForEach(0...confettiConfig.num-1, id:\.self){_ in
-                ConfettiView(confettiConfig: confettiConfig)
-            }
-        }
-        .onAppear(){
-            if firstAppear{
-                DispatchQueue.main.asyncAfter(deadline: .now() + confettiConfig.animationDuration) {
-                    self.finishedAnimationCouter += 1
+        GeometryReader { geo in
+
+            ZStack{
+                ForEach(0...confettiConfig.num-1, id:\.self){_ in
+                    ConfettiView(confettiConfig: confettiConfig)
                 }
-                firstAppear = false
+            }
+            .frame(width: geo.size.width)
+            .onAppear(){
+                if firstAppear{
+                    DispatchQueue.main.asyncAfter(deadline: .now() + confettiConfig.animationDuration) {
+                        self.finishedAnimationCouter += 1
+                    }
+                    firstAppear = false
+                }
             }
         }
     }
